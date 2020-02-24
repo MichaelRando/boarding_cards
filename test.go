@@ -6,17 +6,17 @@ import (
 	"time"
 )
 
-type transportMeans int
-type location string
+type TransportMeans int
+type Location string
 
 const (
-	TRAIN transportMeans = 1 + iota
+	TRAIN TransportMeans = 1 + iota
 	AIRPORT_BUS
 	FLIGHT
 )
 
 const (
-	MADRID         location = "Madrid"
+	MADRID         Location = "Madrid"
 	BARCELONA               = "Barcelona"
 	GERONA_AIRPORT          = "Gerona Airport"
 	STOCKHOLM               = "Stockholm"
@@ -24,11 +24,11 @@ const (
 )
 
 type boardingCard struct {
-	means               transportMeans
+	means               TransportMeans
 	specificMeans       string
 	seatAssignment      string
-	origin              location
-	destination         location
+	origin              Location
+	destination         Location
 	baggageInstructions string
 }
 
@@ -85,23 +85,29 @@ func printOutBoardingCardArray(theArray []boardingCard) {
 
 func sortBoardingCards(theArray []boardingCard) []boardingCard {
  // need to match destination from second card to origin of first card
-	origin_to_destination := make(map[string]string)
-	originSet := make(map[location]bool)
+	originMapToBoardingCard := make(map[string]boardingCard)
+	originSet := make(map[Location]bool)
 	for _, card := range theArray {
-		origin_to_destination[string(card.origin)] = string(card.destination)
-		originSet[(card.origin)] = true
+		originMapToBoardingCard[string(card.origin)] = card
+		if _, exist := originSet[(card.origin)]; !exist {
+			originSet[(card.origin)] = true
+		}
 		originSet[(card.destination)] = false
 	}
 
+	var currentLocation string
 	for k := range originSet {         // Loop
 		if originSet[k] {
-			startingLocation := k
+			currentLocation = string(k)
 		}
 	}
-	// Ran out of the time
-	// The thing to do here is to iterate from the starting location point thru the map to re-order the elements in order
-	while origin_to_destination[currentLocation]
+	var val boardingCard
 	sortedCards := make([]boardingCard, len(theArray))
+	for i := 0; i < len(theArray); i += 1 {
+		val, _ = originMapToBoardingCard[string(currentLocation)]
+		sortedCards[i] = val
+		currentLocation = string(val.destination)
+	}
 	return sortedCards
 }
 
