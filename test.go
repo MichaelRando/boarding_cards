@@ -71,7 +71,7 @@ func printOutBoardingCardArray(theArray []boardingCard) {
 	for _, card := range theArray {
 		switch card.means {
 		case TRAIN:
-			fmt.Printf("Take train %s from %s to %s\n", card.specificMeans, card.origin, card.destination)
+			fmt.Printf("Take train %s from %s to %s. %s\n", card.specificMeans, card.origin, card.destination, card.seatAssignment)
 			break
 		case AIRPORT_BUS:
 			fmt.Printf("Take the airport bus from %s to %s. %s\n", card.origin, card.destination, card.seatAssignment)
